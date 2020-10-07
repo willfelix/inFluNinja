@@ -1,15 +1,12 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-import 'package:inFluNinja/model/user.dart';
-import 'package:inFluNinja/model/git.dart';
+import 'package:inFluNinja/models/git.dart';
+import 'package:inFluNinja/viewmodels/github.viewmodel.dart';
 
 class Github extends StatefulWidget {
-  final User user;
+  final GithubViewModelInterface viewmodel;
 
-  Github({this.user});
+  Github({this.viewmodel});
 
   @override
   _GithubState createState() => _GithubState();
@@ -21,14 +18,15 @@ class _GithubState extends State<Github> {
   @override
   void initState() {
     super.initState();
-    this.future = fetchGit(widget.user.username);
+    this.future = widget.viewmodel.service
+        .fetchByUsername(widget.viewmodel.user.username);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Github"),
+        title: Text(widget.viewmodel.title),
       ),
       body: Center(
         child: FutureBuilder<List<Git>>(
@@ -67,7 +65,7 @@ class _GithubState extends State<Github> {
             } else if (snapshot.hasError) {
               return Center(child: Text("${snapshot.error}"));
             } else if (!snapshot.hasData) {
-              return Center(child: Text("No repositories found"));
+              return Center(child: Text(widget.viewmodel.noRepositoriesTitle));
             }
 
             // By default, show a loading spinner.
@@ -77,16 +75,4 @@ class _GithubState extends State<Github> {
       ),
     );
   }
-}
-
-Future<List<Git>> fetchGit(String username) async {
-  final response =
-      await http.get('https://api.github.com/users/$username/repos');
-
-  if (response.statusCode == 200) {
-    dynamic obj = json.decode(response.body);
-    return Git.fromJson(obj);
-  }
-
-  return null;
 }

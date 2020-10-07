@@ -2,21 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:inFluNinja/components/circle_image.dart';
-import 'package:inFluNinja/model/user.dart';
+import 'package:inFluNinja/viewmodels/profile.viewmodel.dart';
 
 class Profile extends StatefulWidget {
-  final User user;
+  final ProfileViewModelInterface viewmodel;
 
-  Profile({this.user});
+  Profile({this.viewmodel});
 
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  bool isLoading = false;
-  int counter = 0;
-
   @override
   void initState() {
     super.initState();
@@ -26,7 +23,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.user.username),
+        title: Text(widget.viewmodel.user.username),
       ),
       body: Center(
         child: Column(
@@ -34,22 +31,23 @@ class _ProfileState extends State<Profile> {
           children: <Widget>[
             Stack(
               children: <Widget>[
-                isLoading
+                widget.viewmodel.isLoading
                     ? Center(child: CircularProgressIndicator())
-                    : Center(child: CircleImage(path: counter)),
+                    : Center(
+                        child: CircleImage(path: widget.viewmodel.counter)),
               ],
             ),
             SizedBox(height: 20),
             FlatButton(
               onPressed: () {
                 setState(() {
-                  isLoading = true;
-                  counter++;
+                  widget.viewmodel.isLoading = true;
+                  widget.viewmodel.counter++;
                 });
 
                 Future.delayed(Duration(seconds: 4)).then((value) => {
                       setState(() {
-                        isLoading = false;
+                        widget.viewmodel.isLoading = false;
                       })
                     });
               },
@@ -59,7 +57,7 @@ class _ProfileState extends State<Profile> {
             ),
             SizedBox(height: 20),
             Text(
-              'You password is: ${widget.user.password}',
+              'You password is: ${widget.viewmodel.user.password}',
             )
           ],
         ),
