@@ -41,12 +41,14 @@ class SignIn extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         TextField(
+          key: Key("login_field"),
           onChanged: (value) => this.user.username = value,
           decoration: InputDecoration(
               helperText: "Enter a valid login", hintText: "Login"),
         ),
         SizedBox(height: 8),
         TextField(
+          key: Key("password_field"),
           onChanged: (value) => this.user.password = value,
           obscureText: true,
           decoration: InputDecoration(
@@ -56,6 +58,7 @@ class SignIn extends StatelessWidget {
         Container(
             width: double.infinity,
             child: FlatButton(
+              key: Key("submit_field"),
               onPressed: () {
                 if (this.user.isValid()) {
                   Navigator.of(context).push(MaterialPageRoute(

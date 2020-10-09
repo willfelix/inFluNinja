@@ -14,6 +14,7 @@ class CircleImage extends StatelessWidget {
             radius: 18,
             child: ClipOval(
                 child: Image.network("https://source.unsplash.com/random/$path",
+                    key: Key("$path"),
                     fit: BoxFit.cover,
                     height: double.infinity,
                     width: double.infinity))));

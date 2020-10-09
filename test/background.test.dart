@@ -10,4 +10,9 @@ void main() {
     expect(background.height, double.infinity);
     expect(background.color, Colors.blue.withOpacity(0.1));
   });
+
+  test('Check null color value in DefaultBackground', () {
+    final background = DefaultBackground();
+    expect(background.color, null);
+  });
 }
